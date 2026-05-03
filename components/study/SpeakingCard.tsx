@@ -39,13 +39,18 @@ export default function SpeakingCard({ card, state, transcript, isSupported, onS
           Use Chrome or Edge for this feature.
         </p>
       ) : state === 'idle' ? (
-        <button
-          onClick={onStartListening}
-          className="w-16 h-16 rounded-full bg-ink-950 hover:bg-ink-800 text-white text-2xl flex items-center justify-center transition-colors shadow-md"
-          aria-label="Start speaking"
-        >
-          🎤
-        </button>
+        <div className="flex flex-col items-center gap-3">
+          <button
+            onClick={onStartListening}
+            className="w-16 h-16 rounded-full bg-ink-950 hover:bg-ink-800 text-white text-2xl flex items-center justify-center transition-colors shadow-md"
+            aria-label="Start speaking"
+          >
+            🎤
+          </button>
+          <button onClick={() => onNext('learning')} className="text-xs text-ink-400 underline underline-offset-2 hover:text-ink-600">
+            스킵
+          </button>
+        </div>
       ) : state === 'listening' ? (
         <div className="flex flex-col items-center gap-3">
           <div className="relative w-16 h-16 flex items-center justify-center">
@@ -53,6 +58,9 @@ export default function SpeakingCard({ card, state, transcript, isSupported, onS
             <span className="w-16 h-16 rounded-full bg-ink-950 text-white text-2xl flex items-center justify-center">🎤</span>
           </div>
           <p className="text-xs text-ink-500">말하는 중...</p>
+          <button onClick={() => onNext('learning')} className="text-xs text-ink-400 underline underline-offset-2 hover:text-ink-600 mt-1">
+            스킵
+          </button>
         </div>
       ) : state === 'correct' ? (
         <div className="flex flex-col items-center gap-3 text-center">
