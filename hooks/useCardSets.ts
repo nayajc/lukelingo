@@ -8,6 +8,7 @@ import { useLocalStorage } from './useLocalStorage';
 export function useCardSets(userId: string | null = null) {
   const [localSets, setLocalSets] = useLocalStorage<CardSet[]>('lukelingo-sets', [sampleSet]);
   const [cloudSets, setCloudSets] = useState<CardSet[] | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!userId) { setCloudSets(null); return; }
@@ -25,9 +26,13 @@ export function useCardSets(userId: string | null = null) {
       try {
         if (changedSet) await saveCardSet(userId, changedSet);
         if (deletedId) await deleteCardSet(userId, deletedId);
-      } catch (err) {
+        setSaveError(null);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Save failed';
         console.error('Firestore write failed:', err);
-        throw err;
+        setSaveError(msg);
+        // Revert optimistic update on failure
+        setCloudSets(setsRef.current);
       }
     }
   };
@@ -110,5 +115,5 @@ export function useCardSets(userId: string | null = null) {
     applyAndSave((prev) => [...prev, ...toAdd]);
   };
 
-  return { sets, createSet, updateSet, deleteSet, addCard, addCards, updateCard, deleteCard, importSets };
+  return { sets, saveError, createSet, updateSet, deleteSet, addCard, addCards, updateCard, deleteCard, importSets };
 }

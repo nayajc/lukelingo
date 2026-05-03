@@ -34,6 +34,13 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
         </div>
       </div>
 
+      {hooks.saveError && (
+        <div className="mb-4 px-4 py-3 border border-red-200 bg-red-50 rounded-sm text-xs text-red-700">
+          <strong>저장 실패:</strong> {hooks.saveError}
+          <br />Firebase Console → Firestore → Rules 탭에서 권한을 확인해주세요.
+        </div>
+      )}
+
       {sets.length === 0 ? (
         <EmptyState icon="📚" title="No sets yet" description="Create your first card set to start practicing." ctaLabel="Create Set" onCta={() => setCreating(true)} />
       ) : (
