@@ -4,14 +4,14 @@ import '@fontsource/noto-sans-kr/700.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'lukelingo — Korean Practice',
-  description: 'Korean vocabulary flashcard app with TTS pronunciation',
+  title: 'lukelingo',
+  description: 'Korean vocabulary practice with flashcards and TTS',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className="antialiased">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -1,32 +1,50 @@
 'use client';
-import { useLocalStorage } from './useLocalStorage';
+import { useState, useEffect } from 'react';
 import { UserSettings } from '@/types';
+import { useLocalStorage } from './useLocalStorage';
+import { loadSettings, saveSettings, recordStudyLog } from '@/lib/firestore';
 
-const DEFAULT_SETTINGS: UserSettings = {
-  ttsRate: 0.9,
-  ttsPitch: 1.0,
+const DEFAULT: UserSettings = {
+  ttsRate: 0.9, ttsPitch: 1.0,
   showRomanization: true,
   studyDirection: 'korean-first',
-  streak: 0,
-  lastStudyDate: '',
+  streak: 0, lastStudyDate: '',
 };
 
-export function useSettings() {
-  const [settings, setSettings] = useLocalStorage<UserSettings>('lukelingo-settings', DEFAULT_SETTINGS);
+export function useSettings(userId: string | null = null) {
+  const [local, setLocal] = useLocalStorage<UserSettings>('lukelingo-settings', DEFAULT);
+  const [cloud, setCloud] = useState<UserSettings | null>(null);
+
+  useEffect(() => {
+    if (!userId) { setCloud(null); return; }
+    loadSettings(userId).then((s) => setCloud({ ...DEFAULT, ...s } as UserSettings));
+  }, [userId]);
+
+  const settings = userId ? (cloud ?? DEFAULT) : local;
 
   const update = (updates: Partial<UserSettings>) => {
-    setSettings((prev) => ({ ...prev, ...updates }));
+    const next = { ...settings, ...updates };
+    if (userId) { setCloud(next); saveSettings(userId, next); }
+    else setLocal(next);
   };
 
-  const recordStudySession = () => {
+  const recordSession = async (knownCount: number, learningCount: number, total: number) => {
     const today = new Date().toISOString().split('T')[0];
-    setSettings((prev) => {
-      if (prev.lastStudyDate === today) return prev;
-      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-      const streak = prev.lastStudyDate === yesterday ? prev.streak + 1 : 1;
-      return { ...prev, streak, lastStudyDate: today };
-    });
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    const streak = settings.lastStudyDate === yesterday ? settings.streak + 1
+      : settings.lastStudyDate === today ? settings.streak : 1;
+
+    update({ streak, lastStudyDate: today });
+
+    if (userId) {
+      await recordStudyLog(userId, {
+        date: today,
+        cardsStudied: total,
+        knownCount,
+        learningCount,
+      });
+    }
   };
 
-  return { settings, update, recordStudySession };
+  return { settings, update, recordSession };
 }

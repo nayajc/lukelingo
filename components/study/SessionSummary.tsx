@@ -12,29 +12,28 @@ export default function SessionSummary({ total, knownCount, learningCount, onRet
   const pct = total > 0 ? Math.round((knownCount / total) * 100) : 0;
 
   return (
-    <div className="flex flex-col items-center gap-6 py-8 text-center">
-      <div className="text-5xl">{pct >= 80 ? '🎉' : pct >= 50 ? '📈' : '💪'}</div>
+    <div className="flex flex-col items-center gap-8 py-12 text-center">
       <div>
-        <h2 className="text-2xl font-bold text-stone-800">Session Complete!</h2>
-        <p className="text-stone-500 mt-1">{total} cards reviewed</p>
+        <p className="label mb-2">Session complete</p>
+        <p className="text-6xl font-black tracking-tighter text-ink-950">{pct}%</p>
+        <p className="text-sm text-ink-400 mt-1">{total} cards reviewed</p>
       </div>
 
-      <div className="flex gap-4 w-full max-w-xs">
-        <div className="flex-1 bg-green-50 rounded-xl p-4 border border-green-100">
-          <p className="text-2xl font-bold text-green-600">{knownCount}</p>
-          <p className="text-xs text-green-500 mt-1">Got It</p>
+      <div className="w-full max-w-xs grid grid-cols-2 gap-3">
+        <div className="border border-ink-200 rounded-sm p-4 text-left">
+          <p className="text-2xl font-black text-ink-950">{knownCount}</p>
+          <p className="label mt-1">Got It</p>
         </div>
-        <div className="flex-1 bg-yellow-50 rounded-xl p-4 border border-yellow-100">
-          <p className="text-2xl font-bold text-yellow-600">{learningCount}</p>
-          <p className="text-xs text-yellow-500 mt-1">Need Practice</p>
+        <div className="border border-ink-200 rounded-sm p-4 text-left">
+          <p className="text-2xl font-black text-ink-950">{learningCount}</p>
+          <p className="label mt-1">Practicing</p>
         </div>
       </div>
 
       <div className="w-full max-w-xs">
-        <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
-          <div className="h-full bg-green-400 rounded-full transition-all" style={{ width: `${pct}%` }} />
+        <div className="h-px bg-ink-100">
+          <div className="h-px bg-ink-950 transition-all" style={{ width: `${pct}%` }} />
         </div>
-        <p className="text-sm text-stone-400 mt-2">{pct}% known</p>
       </div>
 
       <div className="flex gap-3">

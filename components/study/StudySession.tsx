@@ -12,33 +12,36 @@ interface Props {
   set: CardSet;
   settings: UserSettings;
   onExit: () => void;
-  onSessionComplete: () => void;
+  onSessionComplete: (known: number, learning: number) => void;
   onUpdateCard: (cardId: string, data: { confidence: 'known' | 'learning'; lastReviewedAt: number }) => void;
 }
 
 export default function StudySession({ set, settings, onExit, onSessionComplete, onUpdateCard }: Props) {
   const [key, setKey] = useState(0);
+  const [done, setDone] = useState(false);
   const session = useStudySession(set.cards);
-  const [sessionDone, setSessionDone] = useState(false);
 
   const handleMark = (verdict: 'known' | 'learning') => {
     if (!session.currentCard) return;
     onUpdateCard(session.currentCard.id, { confidence: verdict, lastReviewedAt: Date.now() });
     session.markConfidence(verdict);
     if (session.cardIndex + 1 >= session.totalCards) {
-      onSessionComplete();
-      setSessionDone(true);
+      onSessionComplete(
+        verdict === 'known' ? session.knownCount + 1 : session.knownCount,
+        verdict === 'learning' ? session.learningCount + 1 : session.learningCount,
+      );
+      setDone(true);
     }
   };
 
-  if (sessionDone || session.isComplete) {
+  if (done || session.isComplete) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto px-5 py-8">
         <SessionSummary
           total={session.totalCards}
           knownCount={session.knownCount}
           learningCount={session.learningCount}
-          onRetry={() => { setKey((k) => k + 1); setSessionDone(false); }}
+          onRetry={() => { setKey((k) => k + 1); setDone(false); }}
           onExit={onExit}
         />
       </div>
@@ -46,10 +49,10 @@ export default function StudySession({ set, settings, onExit, onSessionComplete,
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 flex flex-col gap-5">
+    <div className="max-w-2xl mx-auto px-5 py-6 flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={onExit}>← Back</Button>
-        <p className="text-sm font-medium text-stone-500 truncate max-w-[60%] text-center">{set.name}</p>
+        <p className="text-xs font-semibold text-ink-400 tracking-tight truncate max-w-[50%] text-center">{set.name}</p>
         <div className="w-16" />
       </div>
 
@@ -66,11 +69,10 @@ export default function StudySession({ set, settings, onExit, onSessionComplete,
         onFlip={session.flip}
       />
 
-      {session.isFlipped ? (
-        <ConfidenceButtons onMark={handleMark} />
-      ) : (
-        <p className="text-center text-xs text-stone-400">Tap the card or press <kbd className="bg-stone-100 px-1 rounded">Space</kbd> to reveal</p>
-      )}
+      {session.isFlipped
+        ? <ConfidenceButtons onMark={handleMark} />
+        : <p className="text-center label">tap card or press <kbd className="bg-ink-100 border border-ink-200 px-1.5 py-0.5 rounded-sm font-sans">space</kbd></p>
+      }
     </div>
   );
 }

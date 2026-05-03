@@ -7,15 +7,15 @@ export default function ConfidenceButtons({ onMark }: Props) {
     <div className="flex gap-3 w-full">
       <button
         onClick={() => onMark('learning')}
-        className="flex-1 py-3 rounded-xl border-2 border-yellow-300 bg-yellow-50 text-yellow-700 font-medium text-sm hover:bg-yellow-100 transition-colors active:scale-95"
+        className="flex-1 py-3 rounded-sm border-2 border-ink-200 text-ink-600 text-xs font-semibold tracking-widest uppercase hover:border-ink-950 hover:text-ink-950 transition-colors"
       >
-        🔄 Need Practice
+        Need Practice
       </button>
       <button
         onClick={() => onMark('known')}
-        className="flex-1 py-3 rounded-xl border-2 border-green-300 bg-green-50 text-green-700 font-medium text-sm hover:bg-green-100 transition-colors active:scale-95"
+        className="flex-1 py-3 rounded-sm bg-ink-950 text-white text-xs font-semibold tracking-widest uppercase hover:bg-ink-800 transition-colors"
       >
-        ✓ Got It
+        Got It
       </button>
     </div>
   );

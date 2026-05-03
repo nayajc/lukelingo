@@ -1,9 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: #fafaf9;
-  color: #1c1917;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+@layer base {
+  html { font-family: 'Inter', system-ui, sans-serif; }
+  body {
+    background: #fafafa;
+    color: #0a0a0a;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .font-korean { font-family: 'Noto Sans KR', sans-serif; }
+  .label {
+    @apply text-xs font-semibold tracking-widest uppercase text-ink-400;
+  }
 }

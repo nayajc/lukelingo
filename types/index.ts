@@ -27,4 +27,4 @@ export interface UserSettings {
   lastStudyDate: string;
 }
 
-export type View = 'sets' | 'study' | 'settings';
+export type View = 'sets' | 'study' | 'stats' | 'settings';
