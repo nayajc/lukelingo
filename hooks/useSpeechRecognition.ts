@@ -21,12 +21,22 @@ export function useSpeechRecognition() {
   const start = useCallback(() => {
     if (!isSupported) return;
     const Rec = (window.SpeechRecognition || window.webkitSpeechRecognition)!;
-    const rec = new Rec() as unknown as SpeechRecognition;
+    const rec = new Rec() as unknown as {
+      lang: string;
+      continuous: boolean;
+      interimResults: boolean;
+      onstart: (() => void) | null;
+      onresult: ((e: { results: { [i: number]: { [i: number]: { transcript: string } } } }) => void) | null;
+      onend: (() => void) | null;
+      onerror: (() => void) | null;
+      start: () => void;
+      stop: () => void;
+    };
     rec.lang = 'ko-KR';
     rec.continuous = false;
     rec.interimResults = false;
     rec.onstart = () => setIsListening(true);
-    rec.onresult = (e: SpeechRecognitionEvent) => {
+    rec.onresult = (e) => {
       const text = e.results[0]?.[0]?.transcript ?? '';
       setTranscript(text);
     };
@@ -37,7 +47,7 @@ export function useSpeechRecognition() {
   }, [isSupported]);
 
   const stop = useCallback(() => {
-    (recRef.current as unknown as SpeechRecognition | null)?.stop();
+    (recRef.current as unknown as { stop: () => void } | null)?.stop();
     setIsListening(false);
   }, []);
 

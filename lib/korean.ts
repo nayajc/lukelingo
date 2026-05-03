@@ -1,5 +1,6 @@
 export function normalizeKorean(s: string): string {
-  return s.replace(/[\s\p{P}]/gu, '').trim();
+  // eslint-disable-next-line no-useless-escape
+  return s.replace(/[\s.,!?;:'"()\[\]{}\-]/g, '').trim();
 }
 
 function levenshtein(a: string, b: string): number {
