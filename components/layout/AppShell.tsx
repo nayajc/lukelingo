@@ -44,6 +44,7 @@ export default function AppShell() {
         userPhoto={user.photoURL}
         userName={user.displayName}
         onSignOut={signOut}
+        saveStatus={cardSets.saveStatus}
       />
       <TabNav active={view} onChange={handleTabChange} />
 

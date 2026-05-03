@@ -9,6 +9,8 @@ export function useCardSets(userId: string | null = null) {
   const [localSets, setLocalSets] = useLocalStorage<CardSet[]>('lukelingo-sets', [sampleSet]);
   const [cloudSets, setCloudSets] = useState<CardSet[] | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const saveStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!userId) { setCloudSets(null); return; }
@@ -23,15 +25,19 @@ export function useCardSets(userId: string | null = null) {
 
   const persist = async (changedSet?: CardSet, deletedId?: string) => {
     if (userId) {
+      setSaveStatus('saving');
       try {
         if (changedSet) await saveCardSet(userId, changedSet);
         if (deletedId) await deleteCardSet(userId, deletedId);
         setSaveError(null);
+        setSaveStatus('saved');
+        if (saveStatusTimerRef.current) clearTimeout(saveStatusTimerRef.current);
+        saveStatusTimerRef.current = setTimeout(() => setSaveStatus('idle'), 2000);
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : 'Save failed';
         console.error('Firestore write failed:', err);
         setSaveError(msg);
-        // Revert optimistic update on failure
+        setSaveStatus('idle');
         setCloudSets(setsRef.current);
       }
     }
@@ -115,5 +121,5 @@ export function useCardSets(userId: string | null = null) {
     applyAndSave((prev) => [...prev, ...toAdd]);
   };
 
-  return { sets, saveError, createSet, updateSet, deleteSet, addCard, addCards, updateCard, deleteCard, importSets };
+  return { sets, saveError, saveStatus, createSet, updateSet, deleteSet, addCard, addCards, updateCard, deleteCard, importSets };
 }

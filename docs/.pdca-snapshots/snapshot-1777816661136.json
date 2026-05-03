@@ -1,0 +1,639 @@
+{
+  "timestamp": "2026-05-03T13:57:41.135Z",
+  "reason": "compaction",
+  "status": {
+    "version": "2.0",
+    "lastUpdated": "2026-05-03T13:52:50.038Z",
+    "activeFeatures": [
+      "lukelingo",
+      "ui",
+      "layout",
+      "sets",
+      "study",
+      "auth",
+      "dashboard"
+    ],
+    "primaryFeature": "lukelingo",
+    "features": {
+      "lukelingo": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-05-03T08:46:38.022Z",
+          "lastUpdated": "2026-05-03T13:52:33.012Z"
+        },
+        "lastFile": "/Users/jcsong/codework/lukelingo/hooks/useCardSets.ts"
+      },
+      "ui": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-05-03T08:47:39.137Z",
+          "lastUpdated": "2026-05-03T12:29:44.602Z"
+        },
+        "lastFile": "/Users/jcsong/codework/lukelingo/components/ui/EmptyState.tsx"
+      },
+      "layout": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-05-03T08:47:55.499Z",
+          "lastUpdated": "2026-05-03T13:36:05.311Z"
+        },
+        "lastFile": "/Users/jcsong/codework/lukelingo/components/layout/Header.tsx"
+      },
+      "sets": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-05-03T08:48:15.317Z",
+          "lastUpdated": "2026-05-03T13:52:50.038Z"
+        },
+        "lastFile": "/Users/jcsong/codework/lukelingo/components/sets/SetList.tsx"
+      },
+      "study": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-05-03T08:49:05.621Z",
+          "lastUpdated": "2026-05-03T12:36:01.681Z"
+        },
+        "lastFile": "/Users/jcsong/codework/lukelingo/components/study/StudySession.tsx"
+      },
+      "auth": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-05-03T12:37:42.289Z",
+          "lastUpdated": "2026-05-03T13:36:20.390Z"
+        },
+        "lastFile": "/Users/jcsong/codework/lukelingo/components/auth/LoginScreen.tsx"
+      },
+      "dashboard": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-05-03T12:39:30.543Z",
+          "lastUpdated": "2026-05-03T12:47:01.516Z"
+        },
+        "lastFile": "/Users/jcsong/codework/lukelingo/components/dashboard/StatsView.tsx"
+      }
+    },
+    "pipeline": {
+      "currentPhase": 1,
+      "level": "Dynamic",
+      "phaseHistory": []
+    },
+    "session": {
+      "startedAt": "2026-05-03T08:40:31.256Z",
+      "onboardingCompleted": false,
+      "lastActivity": "2026-05-03T13:52:50.038Z"
+    },
+    "history": [
+      {
+        "timestamp": "2026-05-03T08:46:38.022Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:46:49.356Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:46:54.578Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:03.196Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:09.786Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:21.494Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:29.182Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:39.137Z",
+        "feature": "ui",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:44.956Z",
+        "feature": "ui",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:50.156Z",
+        "feature": "ui",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:47:55.499Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:48:01.673Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:48:15.317Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:48:24.336Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:48:31.558Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:48:42.578Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:48:54.700Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:49:05.621Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:49:20.866Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:49:26.730Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:49:35.502Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:49:47.627Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:50:08.549Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:50:18.560Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:50:25.910Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:50:31.153Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:58:26.621Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:58:30.862Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T08:58:35.574Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:25:09.911Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:26:28.089Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:26:43.598Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:27:26.523Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:27:38.562Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:27:56.563Z",
+        "feature": "ui",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:28:38.904Z",
+        "feature": "ui",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:29:44.602Z",
+        "feature": "ui",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:30:53.376Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:31:03.423Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:31:15.058Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:33:12.942Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:34:34.125Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:34:43.706Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:34:53.538Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:36:01.681Z",
+        "feature": "study",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:37:04.238Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:37:17.261Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:37:42.289Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:37:50.904Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:38:27.566Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:38:47.450Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:39:30.543Z",
+        "feature": "dashboard",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:40:29.085Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:40:37.393Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:42:08.928Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:42:57.644Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:43:26.956Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:44:12.475Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:45:35.842Z",
+        "feature": "dashboard",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:46:43.291Z",
+        "feature": "dashboard",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:46:54.147Z",
+        "feature": "dashboard",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:47:01.516Z",
+        "feature": "dashboard",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:47:34.770Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:48:04.120Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:48:12.480Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:48:21.357Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T12:48:57.825Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:19:46.219Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:23:19.954Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:25:36.739Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:27:59.213Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:30:41.004Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:33:59.634Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:34:07.309Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:36:05.311Z",
+        "feature": "layout",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:36:09.796Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:36:14.709Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:36:20.390Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:38:39.698Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:38:44.458Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:38:49.423Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:47:27.249Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:52:16.607Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:52:22.877Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:52:33.012Z",
+        "feature": "lukelingo",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-05-03T13:52:50.038Z",
+        "feature": "sets",
+        "phase": "do",
+        "action": "updated"
+      }
+    ]
+  }
+}

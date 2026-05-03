@@ -5,9 +5,10 @@ interface Props {
   userPhoto?: string | null;
   userName?: string | null;
   onSignOut?: () => void;
+  saveStatus?: 'idle' | 'saving' | 'saved';
 }
 
-export default function Header({ streak, userPhoto, userName, onSignOut }: Props) {
+export default function Header({ streak, userPhoto, userName, onSignOut, saveStatus }: Props) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-ink-200">
       <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
@@ -16,6 +17,12 @@ export default function Header({ streak, userPhoto, userName, onSignOut }: Props
           <span className="font-black text-ink-950 tracking-tighter text-lg">LukeLingo</span>
         </div>
         <div className="flex items-center gap-4">
+          {saveStatus === 'saving' && (
+            <span className="text-xs text-ink-400 tracking-tight">Saving…</span>
+          )}
+          {saveStatus === 'saved' && (
+            <span className="text-xs text-ink-400 tracking-tight">Saved ✓</span>
+          )}
           {streak > 0 && (
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-ink-950 inline-block" />
