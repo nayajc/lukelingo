@@ -12,14 +12,13 @@ const confidenceDot: Record<VocabularyCard['confidence'], string> = {
 };
 
 interface Props {
-  setId: string;
   cards: VocabularyCard[];
   onAdd: (data: Pick<VocabularyCard, 'korean' | 'english' | 'romanization' | 'notes'>) => void;
   onUpdate: (cardId: string, data: Partial<VocabularyCard>) => void;
   onDelete: (cardId: string) => void;
 }
 
-export default function CardList({ setId, cards, onAdd, onUpdate, onDelete }: Props) {
+export default function CardList({ cards, onAdd, onUpdate, onDelete }: Props) {
   const [editing, setEditing] = useState<VocabularyCard | null>(null);
   const [adding, setAdding] = useState(false);
 

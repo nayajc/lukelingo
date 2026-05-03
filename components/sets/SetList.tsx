@@ -53,7 +53,6 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
               {expanded === set.id && (
                 <div className="border-t border-stone-100 p-4 bg-stone-50">
                   <CardList
-                    setId={set.id}
                     cards={set.cards}
                     onAdd={(data) => hooks.addCard(set.id, data)}
                     onUpdate={(cardId, data) => hooks.updateCard(set.id, cardId, data)}
