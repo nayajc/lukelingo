@@ -64,6 +64,16 @@ export function useCardSets(userId: string | null = null) {
     return c.id;
   };
 
+  const addCards = (setId: string, cards: Omit<VocabularyCard, 'id' | 'confidence' | 'createdAt'>[]) => {
+    const newCards: VocabularyCard[] = cards.map((card) => ({
+      ...card, id: crypto.randomUUID(), confidence: 'unrated', createdAt: Date.now(),
+    }));
+    mutate((prev) => {
+      const next = prev.map((s) => s.id === setId ? { ...s, cards: [...s.cards, ...newCards], updatedAt: Date.now() } : s);
+      return { next, changed: next.find((s) => s.id === setId) };
+    });
+  };
+
   const updateCard = (setId: string, cardId: string, updates: Partial<VocabularyCard>) => {
     mutate((prev) => {
       const next = prev.map((s) => s.id === setId
@@ -90,5 +100,5 @@ export function useCardSets(userId: string | null = null) {
     });
   };
 
-  return { sets, createSet, updateSet, deleteSet, addCard, updateCard, deleteCard, importSets };
+  return { sets, createSet, updateSet, deleteSet, addCard, addCards, updateCard, deleteCard, importSets };
 }

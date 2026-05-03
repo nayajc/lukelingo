@@ -28,7 +28,7 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
           <h1 className="text-xl font-black tracking-tighter text-ink-950">My Sets</h1>
         </div>
         <div className="flex items-center gap-2">
-          <PdfUpload sets={sets} onAddCards={(setId, cards) => cards.forEach((c) => hooks.addCard(setId, c))} />
+          <PdfUpload sets={sets} onAddCards={(setId, cards) => hooks.addCards(setId, cards)} />
           <ImportExport sets={sets} onImport={hooks.importSets} />
           <Button size="sm" onClick={() => setCreating(true)}>+ New Set</Button>
         </div>
