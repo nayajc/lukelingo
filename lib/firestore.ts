@@ -14,8 +14,12 @@ export function subscribeCardSets(userId: string, cb: (sets: CardSet[]) => void)
   });
 }
 
+function stripUndefined<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 export async function saveCardSet(userId: string, set: CardSet) {
-  await setDoc(doc(db, 'users', userId, 'cardSets', set.id), set);
+  await setDoc(doc(db, 'users', userId, 'cardSets', set.id), stripUndefined(set));
 }
 
 export async function deleteCardSet(userId: string, setId: string) {
@@ -30,7 +34,7 @@ export async function loadSettings(userId: string): Promise<Partial<UserSettings
 }
 
 export async function saveSettings(userId: string, settings: UserSettings) {
-  await setDoc(doc(db, 'users', userId, 'meta', 'settings'), settings);
+  await setDoc(doc(db, 'users', userId, 'meta', 'settings'), stripUndefined(settings));
 }
 
 // ── Study Logs ────────────────────────────────────────────
