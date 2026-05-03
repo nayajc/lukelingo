@@ -23,12 +23,18 @@ export function useCardSets(userId: string | null = null) {
   const setsRef = useRef(sets);
   setsRef.current = sets;
 
+  const withTimeout = <T,>(p: Promise<T>, ms: number, label: string): Promise<T> =>
+    Promise.race([
+      p,
+      new Promise<T>((_, rej) => setTimeout(() => rej(new Error(`${label} timed out after ${ms / 1000}s — check Firestore rules / network`)), ms)),
+    ]);
+
   const persist = async (changedSet?: CardSet, deletedId?: string) => {
     if (userId) {
       setSaveStatus('saving');
       try {
-        if (changedSet) await saveCardSet(userId, changedSet);
-        if (deletedId) await deleteCardSet(userId, deletedId);
+        if (changedSet) await withTimeout(saveCardSet(userId, changedSet), 10000, 'Save');
+        if (deletedId) await withTimeout(deleteCardSet(userId, deletedId), 10000, 'Delete');
         setSaveError(null);
         setSaveStatus('saved');
         if (saveStatusTimerRef.current) clearTimeout(saveStatusTimerRef.current);
