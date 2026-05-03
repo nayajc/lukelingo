@@ -29,7 +29,7 @@ async function extractFromPdf(file: File): Promise<ExtractedCard[]> {
   });
 
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -71,7 +71,9 @@ Return ONLY the JSON array, no explanation, no markdown code blocks.`,
     throw new Error(`Blocked: ${json.promptFeedback.blockReason}`);
   }
 
-  const rawText: string = json.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+  // Thinking models (2.5+) return multiple parts — skip thought parts, use the last text part
+  const parts: { text?: string; thought?: boolean }[] = json.candidates?.[0]?.content?.parts ?? [];
+  const rawText: string = parts.filter((p) => !p.thought && p.text).map((p) => p.text).join('') ?? '';
   if (!rawText) throw new Error('Gemini returned an empty response');
 
   // Strip markdown code fences if present
