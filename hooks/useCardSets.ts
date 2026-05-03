@@ -12,12 +12,16 @@ export function useCardSets(userId: string | null = null) {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const saveStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingWritesRef = useRef(0);
+  // After a write completes, hold off snapshot updates briefly so a stale
+  // snapshot queued during the write doesn't wipe the optimistic state.
+  const snapshotGraceUntilRef = useRef(0);
 
   useEffect(() => {
     if (!userId) { setCloudSets(null); return; }
     return subscribeCardSets(userId, (data) => {
-      // Don't let the snapshot overwrite optimistic state while a write is in-flight
-      if (pendingWritesRef.current === 0) setCloudSets(data);
+      if (pendingWritesRef.current === 0 && Date.now() > snapshotGraceUntilRef.current) {
+        setCloudSets(data);
+      }
     });
   }, [userId]);
 
@@ -38,10 +42,12 @@ export function useCardSets(userId: string | null = null) {
       pendingWritesRef.current += 1;
       setSaveStatus('saving');
       try {
-        if (changedSet) await withTimeout(saveCardSet(userId, changedSet), 10000, 'Save');
-        if (deletedId) await withTimeout(deleteCardSet(userId, deletedId), 10000, 'Delete');
+        if (changedSet) await withTimeout(saveCardSet(userId, changedSet), 30000, 'Save');
+        if (deletedId) await withTimeout(deleteCardSet(userId, deletedId), 30000, 'Delete');
         setSaveError(null);
         setSaveStatus('saved');
+        // Grace period: ignore snapshots for 3s after write so stale snapshots don't revert state
+        snapshotGraceUntilRef.current = Date.now() + 3000;
         if (saveStatusTimerRef.current) clearTimeout(saveStatusTimerRef.current);
         saveStatusTimerRef.current = setTimeout(() => setSaveStatus('idle'), 2000);
       } catch (err: unknown) {
