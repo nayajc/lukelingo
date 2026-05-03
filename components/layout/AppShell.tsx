@@ -94,7 +94,7 @@ export default function AppShell() {
         )}
 
         {view === 'stats' && (
-          <StatsView userId={user.uid} streak={settings.streak} />
+          <StatsView key={view} userId={user.uid} streak={settings.streak} />
         )}
 
         {view === 'settings' && (

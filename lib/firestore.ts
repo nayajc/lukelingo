@@ -56,7 +56,19 @@ export interface StudyLog {
 }
 
 export async function recordStudyLog(userId: string, log: StudyLog) {
-  await setDoc(doc(db, 'users', userId, 'studyLogs', log.date), log, { merge: true });
+  const ref = doc(db, 'users', userId, 'studyLogs', log.date);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    const prev = snap.data() as StudyLog;
+    await setDoc(ref, {
+      date: log.date,
+      cardsStudied: prev.cardsStudied + log.cardsStudied,
+      knownCount: prev.knownCount + log.knownCount,
+      learningCount: prev.learningCount + log.learningCount,
+    });
+  } else {
+    await setDoc(ref, log);
+  }
 }
 
 export async function loadStudyLogs(userId: string): Promise<StudyLog[]> {
