@@ -1,0 +1,36 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🇰🇷
+        - generic [ref=e7]: lukelingo
+    - navigation [ref=e8]:
+      - generic [ref=e9]:
+        - button "📚 My Sets" [ref=e10] [cursor=pointer]:
+          - generic [ref=e11]: 📚
+          - generic [ref=e12]: My Sets
+        - button "🃏 Study" [active] [ref=e13] [cursor=pointer]:
+          - generic [ref=e14]: 🃏
+          - generic [ref=e15]: Study
+        - button "⚙️ Settings" [ref=e16] [cursor=pointer]:
+          - generic [ref=e17]: ⚙️
+          - generic [ref=e18]: Settings
+    - main [ref=e19]:
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - button "← Back" [ref=e42] [cursor=pointer]
+          - paragraph [ref=e43]: Greetings & Basics
+        - generic [ref=e45]:
+          - generic [ref=e46]: Card 1 of 15
+          - generic [ref=e47]: 0%
+        - generic [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]:
+            - paragraph [ref=e52]: Hello (formal)
+            - button "🔊" [ref=e53]
+            - paragraph [ref=e54]: tap or press space to reveal
+          - generic [ref=e55]:
+            - paragraph [ref=e56]: 안녕하세요
+            - button "🔊" [ref=e57]
+            - paragraph [ref=e58]: annyeonghaseyo
+        - paragraph [ref=e59]: Tap the card or press Space to reveal
+  - alert [ref=e39]
