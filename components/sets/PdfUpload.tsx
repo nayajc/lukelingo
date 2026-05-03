@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import { VocabularyCard, CardSet } from '@/types';
@@ -100,6 +100,10 @@ export default function PdfUpload({ sets, onAddCards }: Props) {
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [targetSetId, setTargetSetId] = useState(sets[0]?.id ?? '');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (targetSetId === '' && sets.length > 0) setTargetSetId(sets[0].id);
+  }, [sets, targetSetId]);
   const [open, setOpen] = useState(false);
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
