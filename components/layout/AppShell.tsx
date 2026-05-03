@@ -8,6 +8,8 @@ import Header from './Header';
 import TabNav from './TabNav';
 import SetList from '@/components/sets/SetList';
 import StudySession from '@/components/study/StudySession';
+import SpeakingSession from '@/components/study/SpeakingSession';
+import StudyModePicker from '@/components/study/StudyModePicker';
 import SettingsView from './SettingsView';
 import StatsView from '@/components/dashboard/StatsView';
 import LoginScreen from '@/components/auth/LoginScreen';
@@ -17,6 +19,7 @@ export default function AppShell() {
   const { user, loading, signOut } = useAuth();
   const [view, setView] = useState<View>('sets');
   const [activeSetId, setActiveSetId] = useState<string | null>(null);
+  const [studyMode, setStudyMode] = useState<'pick' | 'flashcard' | 'speaking'>('pick');
 
   const cardSets = useCardSets(user?.uid ?? null);
   const { settings, update, recordSession } = useSettings(user?.uid ?? null);
@@ -33,8 +36,9 @@ export default function AppShell() {
 
   const activeSet = activeSetId ? cardSets.sets.find((s) => s.id === activeSetId) ?? null : null;
 
-  const handleStudy = (setId: string) => { setActiveSetId(setId); setView('study'); };
+  const handleStudy = (setId: string) => { setActiveSetId(setId); setStudyMode('pick'); setView('study'); };
   const handleExitStudy = () => { setActiveSetId(null); setView('sets'); };
+  const handleBackToPick = () => setStudyMode('pick');
   const handleTabChange = (v: View) => { if (v !== 'study') setActiveSetId(null); setView(v); };
 
   return (
@@ -53,11 +57,25 @@ export default function AppShell() {
           <SetList sets={cardSets.sets} hooks={cardSets} onStudy={handleStudy} />
         )}
 
-        {view === 'study' && activeSet && (
+        {view === 'study' && activeSet && studyMode === 'pick' && (
+          <StudyModePicker set={activeSet} onPick={setStudyMode} onBack={handleExitStudy} />
+        )}
+
+        {view === 'study' && activeSet && studyMode === 'flashcard' && (
           <StudySession
             set={activeSet}
             settings={settings}
-            onExit={handleExitStudy}
+            onExit={handleBackToPick}
+            onSessionComplete={(known, learning) => recordSession(known, learning, known + learning)}
+            onUpdateCard={(cardId, data) => cardSets.updateCard(activeSet.id, cardId, data)}
+          />
+        )}
+
+        {view === 'study' && activeSet && studyMode === 'speaking' && (
+          <SpeakingSession
+            set={activeSet}
+            settings={settings}
+            onExit={handleBackToPick}
             onSessionComplete={(known, learning) => recordSession(known, learning, known + learning)}
             onUpdateCard={(cardId, data) => cardSets.updateCard(activeSet.id, cardId, data)}
           />
