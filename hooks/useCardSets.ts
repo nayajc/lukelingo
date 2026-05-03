@@ -1,13 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CardSet, VocabularyCard } from '@/types';
 import { sampleSet } from '@/lib/sampleData';
 import { subscribeCardSets, saveCardSet, deleteCardSet } from '@/lib/firestore';
-
-// localStorage fallback for unauthenticated use
 import { useLocalStorage } from './useLocalStorage';
 
-function useSets(userId: string | null) {
+export function useCardSets(userId: string | null = null) {
   const [localSets, setLocalSets] = useLocalStorage<CardSet[]>('lukelingo-sets', [sampleSet]);
   const [cloudSets, setCloudSets] = useState<CardSet[] | null>(null);
 
@@ -18,49 +16,63 @@ function useSets(userId: string | null) {
 
   const sets = userId ? (cloudSets ?? []) : localSets;
 
-  const persist = async (updated: CardSet[], set?: CardSet, deletedId?: string) => {
+  // Always-fresh ref so mutations never read stale closure state
+  const setsRef = useRef(sets);
+  setsRef.current = sets;
+
+  const persist = async (changedSet?: CardSet, deletedId?: string) => {
     if (userId) {
-      if (set) await saveCardSet(userId, set);
-      if (deletedId) await deleteCardSet(userId, deletedId);
-    } else {
-      setLocalSets(updated);
+      try {
+        if (changedSet) await saveCardSet(userId, changedSet);
+        if (deletedId) await deleteCardSet(userId, deletedId);
+      } catch (err) {
+        console.error('Firestore write failed:', err);
+        throw err;
+      }
     }
   };
 
-  return { sets, persist };
-}
+  // For local (non-Firebase) path — functional update avoids stale state
+  const setLocal = (fn: (prev: CardSet[]) => CardSet[]) => {
+    setLocalSets(fn);
+  };
 
-export function useCardSets(userId: string | null = null) {
-  const { sets, persist } = useSets(userId);
-
-  const mutate = (fn: (prev: CardSet[]) => { next: CardSet[]; changed?: CardSet; deletedId?: string }) => {
-    const { next, changed, deletedId } = fn(sets);
-    persist(next, changed, deletedId);
+  const applyAndSave = (fn: (prev: CardSet[]) => CardSet[], getChanged?: (next: CardSet[]) => CardSet | undefined, deletedId?: string) => {
+    const prev = setsRef.current;
+    const next = fn(prev);
+    if (userId) {
+      const changed = getChanged ? getChanged(next) : undefined;
+      persist(changed, deletedId);
+      // Optimistic local update for instant UI feedback
+      setCloudSets(next);
+    } else {
+      setLocal(() => next);
+    }
   };
 
   const createSet = (name: string, description?: string) => {
     const s: CardSet = { id: crypto.randomUUID(), name, description, cards: [], createdAt: Date.now(), updatedAt: Date.now() };
-    mutate((prev) => ({ next: [...prev, s], changed: s }));
+    applyAndSave((prev) => [...prev, s], () => s);
     return s.id;
   };
 
   const updateSet = (id: string, updates: Partial<Pick<CardSet, 'name' | 'description'>>) => {
-    mutate((prev) => {
-      const next = prev.map((s) => s.id === id ? { ...s, ...updates, updatedAt: Date.now() } : s);
-      return { next, changed: next.find((s) => s.id === id) };
-    });
+    applyAndSave(
+      (prev) => prev.map((s) => s.id === id ? { ...s, ...updates, updatedAt: Date.now() } : s),
+      (next) => next.find((s) => s.id === id),
+    );
   };
 
   const deleteSet = (id: string) => {
-    mutate((prev) => ({ next: prev.filter((s) => s.id !== id), deletedId: id }));
+    applyAndSave((prev) => prev.filter((s) => s.id !== id), undefined, id);
   };
 
   const addCard = (setId: string, card: Omit<VocabularyCard, 'id' | 'confidence' | 'createdAt'>) => {
     const c: VocabularyCard = { ...card, id: crypto.randomUUID(), confidence: 'unrated', createdAt: Date.now() };
-    mutate((prev) => {
-      const next = prev.map((s) => s.id === setId ? { ...s, cards: [...s.cards, c], updatedAt: Date.now() } : s);
-      return { next, changed: next.find((s) => s.id === setId) };
-    });
+    applyAndSave(
+      (prev) => prev.map((s) => s.id === setId ? { ...s, cards: [...s.cards, c], updatedAt: Date.now() } : s),
+      (next) => next.find((s) => s.id === setId),
+    );
     return c.id;
   };
 
@@ -68,36 +80,34 @@ export function useCardSets(userId: string | null = null) {
     const newCards: VocabularyCard[] = cards.map((card) => ({
       ...card, id: crypto.randomUUID(), confidence: 'unrated', createdAt: Date.now(),
     }));
-    mutate((prev) => {
-      const next = prev.map((s) => s.id === setId ? { ...s, cards: [...s.cards, ...newCards], updatedAt: Date.now() } : s);
-      return { next, changed: next.find((s) => s.id === setId) };
-    });
+    applyAndSave(
+      (prev) => prev.map((s) => s.id === setId ? { ...s, cards: [...s.cards, ...newCards], updatedAt: Date.now() } : s),
+      (next) => next.find((s) => s.id === setId),
+    );
   };
 
   const updateCard = (setId: string, cardId: string, updates: Partial<VocabularyCard>) => {
-    mutate((prev) => {
-      const next = prev.map((s) => s.id === setId
+    applyAndSave(
+      (prev) => prev.map((s) => s.id === setId
         ? { ...s, cards: s.cards.map((c) => c.id === cardId ? { ...c, ...updates } : c), updatedAt: Date.now() }
-        : s);
-      return { next, changed: next.find((s) => s.id === setId) };
-    });
+        : s),
+      (next) => next.find((s) => s.id === setId),
+    );
   };
 
   const deleteCard = (setId: string, cardId: string) => {
-    mutate((prev) => {
-      const next = prev.map((s) => s.id === setId
+    applyAndSave(
+      (prev) => prev.map((s) => s.id === setId
         ? { ...s, cards: s.cards.filter((c) => c.id !== cardId), updatedAt: Date.now() }
-        : s);
-      return { next, changed: next.find((s) => s.id === setId) };
-    });
+        : s),
+      (next) => next.find((s) => s.id === setId),
+    );
   };
 
   const importSets = (imported: CardSet[]) => {
-    mutate((prev) => {
-      const existing = new Set(prev.map((s) => s.id));
-      const toAdd = imported.filter((s) => !existing.has(s.id));
-      return { next: [...prev, ...toAdd] };
-    });
+    const existing = new Set(setsRef.current.map((s) => s.id));
+    const toAdd = imported.filter((s) => !existing.has(s.id));
+    applyAndSave((prev) => [...prev, ...toAdd]);
   };
 
   return { sets, createSet, updateSet, deleteSet, addCard, addCards, updateCard, deleteCard, importSets };
