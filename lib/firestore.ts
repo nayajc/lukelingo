@@ -7,11 +7,20 @@ import { CardSet, UserSettings } from '@/types';
 
 // ── Card Sets ──────────────────────────────────────────────
 
-export function subscribeCardSets(userId: string, cb: (sets: CardSet[]) => void) {
+export function subscribeCardSets(
+  userId: string,
+  cb: (sets: CardSet[]) => void,
+  onError?: (err: Error) => void,
+) {
   const ref = collection(db, 'users', userId, 'cardSets');
-  return onSnapshot(query(ref, orderBy('createdAt')), (snap) => {
-    cb(snap.docs.map((d) => d.data() as CardSet));
-  });
+  return onSnapshot(
+    query(ref, orderBy('createdAt')),
+    (snap) => { cb(snap.docs.map((d) => d.data() as CardSet)); },
+    (err) => {
+      console.error('Firestore read failed:', err.code, err.message);
+      onError?.(err);
+    },
+  );
 }
 
 function stripUndefined<T>(obj: T): T {

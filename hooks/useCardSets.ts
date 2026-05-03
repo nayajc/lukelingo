@@ -13,7 +13,11 @@ export function useCardSets(userId: string | null = null) {
   const saveStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (!userId) { setCloudSets(null); return; }
-    return subscribeCardSets(userId, setCloudSets);
+    return subscribeCardSets(
+      userId,
+      setCloudSets,
+      (err) => setSaveError(`읽기 실패: ${err.message}`),
+    );
   }, [userId]);
 
   const sets = userId ? (cloudSets ?? []) : localSets;
