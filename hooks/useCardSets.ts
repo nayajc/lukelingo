@@ -11,10 +11,14 @@ export function useCardSets(userId: string | null = null) {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const saveStatusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingWritesRef = useRef(0);
 
   useEffect(() => {
     if (!userId) { setCloudSets(null); return; }
-    return subscribeCardSets(userId, setCloudSets);
+    return subscribeCardSets(userId, (data) => {
+      // Don't let the snapshot overwrite optimistic state while a write is in-flight
+      if (pendingWritesRef.current === 0) setCloudSets(data);
+    });
   }, [userId]);
 
   const sets = userId ? (cloudSets ?? []) : localSets;
@@ -31,6 +35,7 @@ export function useCardSets(userId: string | null = null) {
 
   const persist = async (changedSet?: CardSet, deletedId?: string) => {
     if (userId) {
+      pendingWritesRef.current += 1;
       setSaveStatus('saving');
       try {
         if (changedSet) await withTimeout(saveCardSet(userId, changedSet), 10000, 'Save');
@@ -45,6 +50,8 @@ export function useCardSets(userId: string | null = null) {
         setSaveError(msg);
         setSaveStatus('idle');
         setCloudSets(setsRef.current);
+      } finally {
+        pendingWritesRef.current -= 1;
       }
     }
   };
