@@ -15,9 +15,16 @@ async function extractFromPdf(file: File): Promise<ExtractedCard[]> {
   const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   if (!apiKey) throw new Error('NEXT_PUBLIC_GEMINI_API_KEY is not set');
 
-  const base64 = await new Promise<string>((resolve) => {
+  // Check file size — Gemini inline limit is ~20MB
+  if (file.size > 20 * 1024 * 1024) throw new Error('PDF is too large (max 20MB)');
+
+  const base64 = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = (e) => resolve((e.target?.result as string).split(',')[1]);
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      resolve(result.split(',')[1]);
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
     reader.readAsDataURL(file);
   });
 
@@ -29,24 +36,59 @@ async function extractFromPdf(file: File): Promise<ExtractedCard[]> {
       body: JSON.stringify({
         contents: [{
           parts: [
+            { inline_data: { mime_type: 'application/pdf', data: base64 } },
             {
-              inline_data: { mime_type: 'application/pdf', data: base64 },
-            },
-            {
-              text: `Extract all Korean vocabulary words from this PDF. Return ONLY a JSON array like:
-[{"korean":"안녕하세요","english":"Hello","romanization":"annyeonghaseyo"}, ...]
-Include romanization when possible. Return raw JSON only, no markdown.`,
+              text: `Look at this Korean language learning PDF carefully.
+Find every Korean word or phrase that appears alongside an English translation.
+This includes vocabulary tables, word lists, glossaries, or any Korean-English pairs.
+
+Return a JSON array. Each item must have:
+- "korean": the Korean text (한글)
+- "english": the English meaning
+- "romanization": romanized pronunciation (if you can determine it)
+
+Example format:
+[{"korean":"언제","english":"when","romanization":"eonje"},{"korean":"생일","english":"birthday","romanization":"saengil"}]
+
+Return ONLY the JSON array, no explanation, no markdown code blocks.`,
             },
           ],
         }],
+        generationConfig: { temperature: 0.1 },
       }),
     }
   );
 
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error?.message ?? `API error ${res.status}`);
+  }
+
   const json = await res.json();
-  const text: string = json.candidates?.[0]?.content?.parts?.[0]?.text ?? '[]';
-  const cleaned = text.replace(/```json\n?/g, '').replace(/```/g, '').trim();
-  return JSON.parse(cleaned) as ExtractedCard[];
+
+  // Check for blocked content
+  if (json.promptFeedback?.blockReason) {
+    throw new Error(`Blocked: ${json.promptFeedback.blockReason}`);
+  }
+
+  const rawText: string = json.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+  if (!rawText) throw new Error('Gemini returned an empty response');
+
+  // Strip markdown code fences if present
+  const cleaned = rawText
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/, '')
+    .trim();
+
+  // Find JSON array even if there's surrounding text
+  const match = cleaned.match(/\[[\s\S]*\]/);
+  if (!match) throw new Error(`Could not find vocabulary in this PDF.\n\nGemini said: ${rawText.slice(0, 200)}`);
+
+  try {
+    return JSON.parse(match[0]) as ExtractedCard[];
+  } catch {
+    throw new Error(`Failed to parse response.\n\nGemini said: ${rawText.slice(0, 300)}`);
+  }
 }
 
 export default function PdfUpload({ sets, onAddCards }: Props) {
