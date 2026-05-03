@@ -17,7 +17,7 @@ export default function LoginScreen() {
       <header className="border-b border-ink-200 px-8 h-14 flex items-center">
         <div className="flex items-center gap-2">
           <span>🇰🇷</span>
-          <span className="font-black tracking-tighter text-lg text-ink-950">lukelingo</span>
+          <span className="font-black tracking-tighter text-lg text-ink-950">LukeLingo</span>
         </div>
       </header>
 

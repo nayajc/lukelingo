@@ -13,7 +13,7 @@ export default function Header({ streak, userPhoto, userName, onSignOut }: Props
       <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <span className="text-base">🇰🇷</span>
-          <span className="font-black text-ink-950 tracking-tighter text-lg">lukelingo</span>
+          <span className="font-black text-ink-950 tracking-tighter text-lg">LukeLingo</span>
         </div>
         <div className="flex items-center gap-4">
           {streak > 0 && (
