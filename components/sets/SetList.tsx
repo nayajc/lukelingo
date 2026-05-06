@@ -61,7 +61,7 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
                     Study
                   </Button>
                   <Button size="sm" variant="ghost" className="!px-2" onClick={(e) => { e.stopPropagation(); setEditingSet(set); }}>✏</Button>
-                  <Button size="sm" variant="ghost" className="!px-2 text-ink-400" onClick={(e) => { e.stopPropagation(); hooks.deleteSet(set.id); }}>✕</Button>
+                  <Button size="sm" variant="ghost" className="!px-2 text-ink-400" onClick={(e) => { e.stopPropagation(); if (window.confirm(`Delete "${set.name}"? This cannot be undone.`)) hooks.deleteSet(set.id); }}>✕</Button>
                 </div>
               </div>
 
