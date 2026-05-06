@@ -13,7 +13,7 @@ interface Props {
 export default function Header({ streak, xp, userPhoto, userName, onSignOut, saveStatus }: Props) {
   const level = calcLevel(xp);
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-ink-200">
+    <header className="sticky top-0 z-40 bg-white border-b border-brand-purple/10 shadow-sm">
       <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
         <div className="flex items-center">
           <Image src="/logo.jpg" alt="LukeLingo" width={120} height={45} className="object-contain" priority />
@@ -25,13 +25,13 @@ export default function Header({ streak, xp, userPhoto, userName, onSignOut, sav
           {saveStatus === 'saved' && (
             <span className="text-xs text-ink-400 tracking-tight">Saved ✓</span>
           )}
-          <span className="text-xs font-semibold text-ink-500 tracking-tight border border-ink-200 rounded-full px-2 py-0.5">
+          <span className="text-xs font-bold text-brand-purple bg-brand-purple-light rounded-full px-2.5 py-0.5">
             Lv.{level}
           </span>
           {streak > 0 && (
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-ink-950 inline-block" />
-              <span className="text-xs font-semibold text-ink-600 tracking-tight">{streak}d streak</span>
+            <div className="flex items-center gap-1 bg-brand-yellow-light rounded-full px-2.5 py-0.5">
+              <span className="text-sm">🔥</span>
+              <span className="text-xs font-bold text-amber-600">{streak}</span>
             </div>
           )}
           {userPhoto && (

@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Nunito', 'system-ui', 'sans-serif'],
         korean: ["'Noto Sans KR'", 'sans-serif'],
       },
       colors: {
@@ -23,10 +23,20 @@ const config: Config = {
           100: '#f5f5f5',
           50:  '#fafafa',
         },
+        brand: {
+          purple: '#6C63FF',
+          'purple-light': '#ede9fe',
+          green:  '#4ADE80',
+          'green-light': '#dcfce7',
+          yellow: '#FBBF24',
+          'yellow-light': '#fef9c3',
+          coral:  '#F87171',
+          'coral-light': '#fee2e2',
+        },
       },
       boxShadow: {
-        card: '0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
-        lift: '0 4px 16px 0 rgb(0 0 0 / 0.10)',
+        card: '0 2px 8px 0 rgb(108 99 255 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.05)',
+        lift: '0 4px 20px 0 rgb(108 99 255 / 0.15)',
       },
     },
   },

@@ -17,7 +17,7 @@ function launchConfetti(canvas: HTMLCanvasElement) {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const COLORS = ['#0a0a0a', '#525252', '#a3a3a3', '#d4d4d4', '#404040'];
+  const COLORS = ['#6C63FF', '#4ADE80', '#FBBF24', '#F87171', '#60a5fa', '#f472b6', '#34d399'];
   const pieces = Array.from({ length: 120 }, () => ({
     x: Math.random() * canvas.width,
     y: Math.random() * -canvas.height * 0.5,
@@ -82,31 +82,32 @@ export default function SessionSummary({ total, knownCount, learningCount, onRet
       />
       <div className="flex flex-col items-center gap-8 py-12 text-center">
         <div>
-          <p className="label mb-2">Session complete</p>
+          <p className="text-4xl mb-2">🎊</p>
+          <p className="text-sm font-bold text-brand-purple mb-1">Session Complete!</p>
           <p className="text-6xl font-black tracking-tighter text-ink-950">{pct}%</p>
           <p className="text-sm text-ink-400 mt-1">{total} cards reviewed</p>
         </div>
 
         <div className="w-full max-w-xs grid grid-cols-2 gap-3">
-          <div className="border border-ink-200 rounded-sm p-4 text-left">
-            <p className="text-2xl font-black text-ink-950">{knownCount}</p>
-            <p className="label mt-1">Got It</p>
+          <div className="bg-brand-green-light border border-brand-green/20 rounded-2xl p-4 text-left">
+            <p className="text-2xl font-black text-green-600">{knownCount}</p>
+            <p className="text-xs font-bold text-green-500 mt-1">🎉 Got It</p>
           </div>
-          <div className="border border-ink-200 rounded-sm p-4 text-left">
-            <p className="text-2xl font-black text-ink-950">{learningCount}</p>
-            <p className="label mt-1">Practicing</p>
+          <div className="bg-brand-coral-light border border-brand-coral/20 rounded-2xl p-4 text-left">
+            <p className="text-2xl font-black text-red-400">{learningCount}</p>
+            <p className="text-xs font-bold text-red-400 mt-1">💪 Practicing</p>
           </div>
         </div>
 
         <div className="w-full max-w-xs">
-          <div className="h-px bg-ink-100">
-            <div className="h-px bg-ink-950 transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-2 bg-ink-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-brand-purple rounded-full transition-all" style={{ width: `${pct}%` }} />
           </div>
         </div>
 
         <div className="flex gap-3">
           <Button variant="secondary" onClick={onExit}>Back to Sets</Button>
-          <Button onClick={onRetry}>Study Again</Button>
+          <Button onClick={onRetry}>Study Again ✨</Button>
         </div>
       </div>
     </>

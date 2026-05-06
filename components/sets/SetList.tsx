@@ -56,7 +56,7 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
                     <p className="font-semibold text-sm text-ink-950 tracking-tight">{set.name}</p>
                     {set.language === 'chinese' && <span className="text-xs text-ink-400 border border-ink-200 rounded px-1.5 py-0.5 leading-none">🇨🇳 中文</span>}
                     {set.cards.length > 0 && set.cards.every((c) => c.confidence === 'known') && (
-                      <span className="text-xs font-semibold text-white bg-ink-950 rounded px-1.5 py-0.5 leading-none">✦ Complete</span>
+                      <span className="text-xs font-bold text-green-600 bg-brand-green-light rounded-full px-2 py-0.5 leading-none">⭐ Complete</span>
                     )}
                   </div>
                   {set.description && <p className="text-xs text-ink-400 mt-0.5">{set.description}</p>}

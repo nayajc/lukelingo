@@ -5,28 +5,29 @@ interface Props {
   onChange: (v: View) => void;
 }
 
-const tabs: { id: View; label: string }[] = [
-  { id: 'sets',     label: 'Sets'     },
-  { id: 'study',    label: 'Study'    },
-  { id: 'stats',    label: 'Progress' },
-  { id: 'settings', label: 'Settings' },
+const tabs: { id: View; label: string; emoji: string }[] = [
+  { id: 'sets',     label: 'Sets',     emoji: '📚' },
+  { id: 'study',    label: 'Study',    emoji: '🃏' },
+  { id: 'stats',    label: 'Progress', emoji: '📊' },
+  { id: 'settings', label: 'Settings', emoji: '⚙️' },
 ];
 
 export default function TabNav({ active, onChange }: Props) {
   return (
-    <nav className="sticky top-14 z-30 bg-white border-b border-ink-200">
-      <div className="max-w-2xl mx-auto px-5 flex gap-0">
+    <nav className="sticky top-14 z-30 bg-white border-b border-brand-purple/10 shadow-sm">
+      <div className="max-w-2xl mx-auto px-4 flex gap-1 py-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => onChange(tab.id)}
-            className={`px-4 py-3 text-xs font-semibold tracking-widest uppercase transition-colors border-b-2 ${
+            className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl text-xs font-bold tracking-tight transition-all ${
               active === tab.id
-                ? 'border-ink-950 text-ink-950'
-                : 'border-transparent text-ink-400 hover:text-ink-700'
+                ? 'bg-brand-purple-light text-brand-purple'
+                : 'text-ink-400 hover:text-brand-purple hover:bg-brand-purple-light/50'
             }`}
           >
-            {tab.label}
+            <span className="text-base">{tab.emoji}</span>
+            <span>{tab.label}</span>
           </button>
         ))}
       </div>

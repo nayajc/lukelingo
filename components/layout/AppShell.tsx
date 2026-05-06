@@ -43,7 +43,7 @@ export default function AppShell() {
   const handleTabChange = (v: View) => { if (v !== 'study') setActiveSetId(null); setView(v); };
 
   return (
-    <div className="min-h-screen bg-ink-50">
+    <div className="min-h-screen bg-[#f5f3ff]">
       <Header
         streak={settings.streak}
         xp={settings.xp ?? 0}

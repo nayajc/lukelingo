@@ -77,8 +77,8 @@ export default function StatsView({ userId, streak, xp }: Props) {
           </div>
           <span className="text-xs text-ink-400">{xp} XP · {toNext} to next</span>
         </div>
-        <div className="w-full h-2 bg-ink-100 rounded-full overflow-hidden">
-          <div className="h-2 bg-ink-950 rounded-full transition-all" style={{ width: `${pct}%` }} />
+        <div className="w-full h-2 bg-brand-purple-light rounded-full overflow-hidden">
+          <div className="h-2 bg-brand-purple rounded-full transition-all" style={{ width: `${pct}%` }} />
         </div>
       </div>
 

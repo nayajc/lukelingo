@@ -9,23 +9,23 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<Variant, string> = {
-  primary:   'bg-ink-950 text-white hover:bg-ink-800 border border-ink-950',
-  secondary: 'bg-white text-ink-900 hover:bg-ink-100 border border-ink-200',
-  ghost:     'text-ink-600 hover:text-ink-950 hover:bg-ink-100 border border-transparent',
-  danger:    'bg-ink-950 text-white hover:bg-ink-800 border border-ink-950',
+  primary:   'bg-brand-purple text-white hover:bg-purple-600 border border-brand-purple shadow-sm',
+  secondary: 'bg-white text-ink-900 hover:bg-brand-purple-light border border-brand-purple/30',
+  ghost:     'text-ink-600 hover:text-brand-purple hover:bg-brand-purple-light border border-transparent',
+  danger:    'bg-brand-coral text-white hover:bg-red-500 border border-brand-coral',
 };
 
 const sizes: Record<Size, string> = {
   sm: 'px-3 py-1.5 text-xs',
-  md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-sm',
+  md: 'px-5 py-2 text-sm',
+  lg: 'px-7 py-3 text-sm',
 };
 
 export default function Button({ variant = 'primary', size = 'md', className = '', children, ...props }: Props) {
   return (
     <button
       {...props}
-      className={`inline-flex items-center gap-2 font-medium transition-colors rounded-sm disabled:opacity-40 disabled:cursor-not-allowed tracking-tight ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex items-center gap-2 font-bold transition-all rounded-full disabled:opacity-40 disabled:cursor-not-allowed tracking-tight ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {children}
     </button>
