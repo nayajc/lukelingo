@@ -12,9 +12,8 @@ export default function Header({ streak, userPhoto, userName, onSignOut, saveSta
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-ink-200">
       <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <span className="text-base">🇰🇷</span>
-          <span className="font-black text-ink-950 tracking-tighter text-lg">LukeLingo</span>
+        <div className="flex items-center">
+          <Image src="/logo.jpg" alt="LukeLingo" width={120} height={45} className="object-contain" priority />
         </div>
         <div className="flex items-center gap-4">
           {saveStatus === 'saving' && (
