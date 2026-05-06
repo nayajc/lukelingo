@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { VocabularyCard } from '@/types';
+import { VocabularyCard, SetLanguage } from '@/types';
 import Button from '@/components/ui/Button';
 import CardEditor from './CardEditor';
 import EmptyState from '@/components/ui/EmptyState';
@@ -13,12 +13,13 @@ const confidenceDot: Record<VocabularyCard['confidence'], string> = {
 
 interface Props {
   cards: VocabularyCard[];
+  setLanguage?: SetLanguage;
   onAdd: (data: Pick<VocabularyCard, 'korean' | 'english' | 'romanization' | 'notes'>) => void;
   onUpdate: (cardId: string, data: Partial<VocabularyCard>) => void;
   onDelete: (cardId: string) => void;
 }
 
-export default function CardList({ cards, onAdd, onUpdate, onDelete }: Props) {
+export default function CardList({ cards, setLanguage, onAdd, onUpdate, onDelete }: Props) {
   const [editing, setEditing] = useState<VocabularyCard | null>(null);
   const [adding, setAdding] = useState(false);
 
@@ -50,8 +51,8 @@ export default function CardList({ cards, onAdd, onUpdate, onDelete }: Props) {
         </div>
       )}
 
-      {adding && <CardEditor onSave={onAdd} onClose={() => setAdding(false)} />}
-      {editing && <CardEditor existing={editing} onSave={(data) => onUpdate(editing.id, data)} onClose={() => setEditing(null)} />}
+      {adding && <CardEditor setLanguage={setLanguage} onSave={onAdd} onClose={() => setAdding(false)} />}
+      {editing && <CardEditor existing={editing} setLanguage={setLanguage} onSave={(data) => onUpdate(editing.id, data)} onClose={() => setEditing(null)} />}
     </div>
   );
 }

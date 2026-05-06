@@ -9,10 +9,13 @@ export interface VocabularyCard {
   lastReviewedAt?: number;
 }
 
+export type SetLanguage = 'korean' | 'chinese';
+
 export interface CardSet {
   id: string;
   name: string;
   description?: string;
+  language?: SetLanguage;
   cards: VocabularyCard[];
   createdAt: number;
   updatedAt: number;

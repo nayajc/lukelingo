@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
-import { VocabularyCard, CardSet } from '@/types';
+import { VocabularyCard, CardSet, SetLanguage } from '@/types';
 
 interface ExtractedCard { korean: string; english: string; romanization?: string; }
 
@@ -11,7 +11,7 @@ interface Props {
   onAddCards: (setId: string, cards: Omit<VocabularyCard, 'id' | 'confidence' | 'createdAt'>[]) => void;
 }
 
-async function extractFromPdf(file: File): Promise<ExtractedCard[]> {
+async function extractFromPdf(file: File, language: SetLanguage = 'korean'): Promise<ExtractedCard[]> {
   const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   if (!apiKey) throw new Error('NEXT_PUBLIC_GEMINI_API_KEY is not set');
 
@@ -38,7 +38,21 @@ async function extractFromPdf(file: File): Promise<ExtractedCard[]> {
           parts: [
             { inline_data: { mime_type: 'application/pdf', data: base64 } },
             {
-              text: `Look at this Korean language learning PDF carefully.
+              text: language === 'chinese'
+                ? `Look at this Chinese language learning PDF carefully.
+Find every Chinese word or phrase that appears alongside an English translation.
+This includes vocabulary tables, word lists, glossaries, or any Chinese-English pairs.
+
+Return a JSON array. Each item must have:
+- "korean": the Chinese text (汉字)
+- "english": the English meaning
+- "romanization": pinyin pronunciation (if you can determine it)
+
+Example format:
+[{"korean":"你好","english":"hello","romanization":"nǐ hǎo"},{"korean":"谢谢","english":"thank you","romanization":"xiè xie"}]
+
+Return ONLY the JSON array, no explanation, no markdown code blocks.`
+                : `Look at this Korean language learning PDF carefully.
 Find every Korean word or phrase that appears alongside an English translation.
 This includes vocabulary tables, word lists, glossaries, or any Korean-English pairs.
 
@@ -112,7 +126,8 @@ export default function PdfUpload({ sets, onAddCards }: Props) {
     setStep('loading');
     setError('');
     try {
-      const extracted = await extractFromPdf(file);
+      const targetSet = sets.find((s) => s.id === targetSetId);
+      const extracted = await extractFromPdf(file, targetSet?.language ?? 'korean');
       setCards(extracted);
       setSelected(new Set(extracted.map((_, i) => i)));
       setStep('preview');
@@ -153,7 +168,7 @@ export default function PdfUpload({ sets, onAddCards }: Props) {
               >
                 <p className="text-2xl mb-2">📄</p>
                 <p className="text-sm font-medium text-ink-600">Click to upload a PDF</p>
-                <p className="text-xs text-ink-400 mt-1">Gemini AI will extract Korean vocabulary</p>
+                <p className="text-xs text-ink-400 mt-1">Gemini AI will extract {sets.find((s) => s.id === targetSetId)?.language === 'chinese' ? 'Chinese' : 'Korean'} vocabulary</p>
               </div>
               {error && <p className="text-xs text-red-600">{error}</p>}
               <input ref={inputRef} type="file" accept=".pdf" className="hidden" onChange={handleFile} />

@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-export function useSpeechRecognition() {
+export function useSpeechRecognition(lang: string = 'ko-KR') {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const recRef = useRef<SR | null>(null);
@@ -32,7 +32,7 @@ export function useSpeechRecognition() {
       start: () => void;
       stop: () => void;
     };
-    rec.lang = 'ko-KR';
+    rec.lang = lang;
     rec.continuous = false;
     rec.interimResults = false;
     rec.onstart = () => setIsListening(true);
@@ -44,7 +44,7 @@ export function useSpeechRecognition() {
     rec.onerror = () => setIsListening(false);
     recRef.current = rec as unknown as SR;
     rec.start();
-  }, [isSupported]);
+  }, [isSupported, lang]);
 
   const stop = useCallback(() => {
     (recRef.current as unknown as { stop: () => void } | null)?.stop();

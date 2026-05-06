@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
-import { VocabularyCard } from '@/types';
-import { useTTS } from '@/hooks/useTTS';
+import { VocabularyCard, SetLanguage } from '@/types';
+import { useTTS, TTSLang } from '@/hooks/useTTS';
 
 interface Props {
   card: VocabularyCard;
@@ -10,14 +10,16 @@ interface Props {
   showRomanization: boolean;
   ttsRate: number;
   ttsPitch: number;
+  setLanguage?: SetLanguage;
   onFlip: () => void;
 }
 
-export default function Flashcard({ card, isFlipped, showKoreanFirst, showRomanization, ttsRate, ttsPitch, onFlip }: Props) {
+export default function Flashcard({ card, isFlipped, showKoreanFirst, showRomanization, ttsRate, ttsPitch, setLanguage, onFlip }: Props) {
   const { speak, isSpeaking } = useTTS(ttsRate, ttsPitch);
 
-  const frontLang = showKoreanFirst ? 'ko-KR' : 'en-US';
-  const backLang  = showKoreanFirst ? 'en-US' : 'ko-KR';
+  const targetLangCode: TTSLang = (setLanguage ?? 'korean') === 'chinese' ? 'zh-CN' : 'ko-KR';
+  const frontLang: TTSLang = showKoreanFirst ? targetLangCode : 'en-US';
+  const backLang: TTSLang  = showKoreanFirst ? 'en-US' : targetLangCode;
   const frontText = showKoreanFirst ? card.korean  : card.english;
   const backText  = showKoreanFirst ? card.english : card.korean;
 
@@ -27,7 +29,7 @@ export default function Flashcard({ card, isFlipped, showKoreanFirst, showRomani
     return () => window.removeEventListener('keydown', handler);
   }, [onFlip]);
 
-  const SpeakerBtn = ({ text, lang }: { text: string; lang: 'ko-KR' | 'en-US' }) => (
+  const SpeakerBtn = ({ text, lang }: { text: string; lang: TTSLang }) => (
     <button
       onClick={(e) => { e.stopPropagation(); speak(text, lang); }}
       title="Hear pronunciation"

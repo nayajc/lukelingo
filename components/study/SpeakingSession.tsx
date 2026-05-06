@@ -24,7 +24,8 @@ export default function SpeakingSession({ set, onExit, onSessionComplete, onUpda
   const [done, setDone] = useState(false);
   const [cardState, setCardState] = useState<CardState>('idle');
   const session = useStudySession(set.cards);
-  const speech = useSpeechRecognition();
+  const srLang = (set.language ?? 'korean') === 'chinese' ? 'zh-CN' : 'ko-KR';
+  const speech = useSpeechRecognition(srLang);
 
   // Evaluate transcript when it changes
   useEffect(() => {

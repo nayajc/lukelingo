@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { CardSet, VocabularyCard } from '@/types';
+import { CardSet, VocabularyCard, SetLanguage } from '@/types';
 import { sampleSet } from '@/lib/sampleData';
 import { subscribeCardSets, saveCardSet, deleteCardSet } from '@/lib/firestore';
 import { useLocalStorage } from './useLocalStorage';
@@ -68,13 +68,13 @@ export function useCardSets(userId: string | null = null) {
     }
   };
 
-  const createSet = (name: string, description?: string) => {
-    const s: CardSet = { id: crypto.randomUUID(), name, description, cards: [], createdAt: Date.now(), updatedAt: Date.now() };
+  const createSet = (name: string, description?: string, language?: SetLanguage) => {
+    const s: CardSet = { id: crypto.randomUUID(), name, description, language: language ?? 'korean', cards: [], createdAt: Date.now(), updatedAt: Date.now() };
     applyAndSave((prev) => [...prev, s], () => s);
     return s.id;
   };
 
-  const updateSet = (id: string, updates: Partial<Pick<CardSet, 'name' | 'description'>>) => {
+  const updateSet = (id: string, updates: Partial<Pick<CardSet, 'name' | 'description' | 'language'>>) => {
     applyAndSave(
       (prev) => prev.map((s) => s.id === id ? { ...s, ...updates, updatedAt: Date.now() } : s),
       (next) => next.find((s) => s.id === id),

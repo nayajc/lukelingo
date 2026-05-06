@@ -2,21 +2,27 @@
 import { useState } from 'react';
 import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
-import { VocabularyCard } from '@/types';
+import { VocabularyCard, SetLanguage } from '@/types';
 
 type CardInput = Pick<VocabularyCard, 'korean' | 'english' | 'romanization' | 'notes'>;
 
 interface Props {
   existing?: VocabularyCard;
+  setLanguage?: SetLanguage;
   onSave: (data: CardInput) => void;
   onClose: () => void;
 }
 
-export default function CardEditor({ existing, onSave, onClose }: Props) {
+export default function CardEditor({ existing, setLanguage, onSave, onClose }: Props) {
   const [korean, setKorean] = useState(existing?.korean ?? '');
   const [english, setEnglish] = useState(existing?.english ?? '');
   const [romanization, setRomanization] = useState(existing?.romanization ?? '');
   const [notes, setNotes] = useState(existing?.notes ?? '');
+
+  const isChinese = (setLanguage ?? 'korean') === 'chinese';
+  const targetLabel = isChinese ? 'Chinese (中文)' : 'Korean';
+  const targetPlaceholder = isChinese ? '你好' : '안녕하세요';
+  const romanizationPlaceholder = isChinese ? 'nǐ hǎo — pinyin (optional)' : 'annyeonghaseyo (optional)';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,9 +52,9 @@ export default function CardEditor({ existing, onSave, onClose }: Props) {
   return (
     <Modal title={existing ? 'Edit Card' : 'New Card'} onClose={onClose}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {field('Korean', korean, setKorean, { required: true, autoFocus: true, placeholder: '안녕하세요' })}
+        {field(targetLabel, korean, setKorean, { required: true, autoFocus: true, placeholder: targetPlaceholder })}
         {field('English', english, setEnglish, { required: true, placeholder: 'Hello' })}
-        {field('Romanization', romanization, setRomanization, { placeholder: 'annyeonghaseyo (optional)' })}
+        {field('Romanization', romanization, setRomanization, { placeholder: romanizationPlaceholder })}
         {field('Notes', notes, setNotes, { placeholder: 'Optional context or usage notes' })}
         <div className="flex gap-2 justify-end pt-2">
           <Button variant="secondary" type="button" onClick={onClose}>Cancel</Button>

@@ -1,6 +1,8 @@
 'use client';
 import { useState, useCallback, useRef } from 'react';
 
+export type TTSLang = 'ko-KR' | 'en-US' | 'zh-CN';
+
 export function useTTS(rate = 0.9, pitch = 1.0) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -10,7 +12,7 @@ export function useTTS(rate = 0.9, pitch = 1.0) {
     return voices.find((v) => v.lang.startsWith(lang)) ?? null;
   };
 
-  const speak = useCallback((text: string, lang: 'ko-KR' | 'en-US') => {
+  const speak = useCallback((text: string, lang: TTSLang) => {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
 

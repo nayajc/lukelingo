@@ -52,7 +52,10 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
                 onClick={() => setExpanded(expanded === set.id ? null : set.id)}
               >
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-ink-950 tracking-tight">{set.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-sm text-ink-950 tracking-tight">{set.name}</p>
+                    {set.language === 'chinese' && <span className="text-xs text-ink-400 border border-ink-200 rounded px-1.5 py-0.5 leading-none">🇨🇳 中文</span>}
+                  </div>
                   {set.description && <p className="text-xs text-ink-400 mt-0.5">{set.description}</p>}
                   <p className="label mt-1">{set.cards.length} cards</p>
                 </div>
@@ -69,6 +72,7 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
                 <div className="pb-4 pl-2 border-l-2 border-ink-100 ml-1 mb-2">
                   <CardList
                     cards={set.cards}
+                    setLanguage={set.language}
                     onAdd={(data) => hooks.addCard(set.id, data)}
                     onUpdate={(cardId, data) => hooks.updateCard(set.id, cardId, data)}
                     onDelete={(cardId) => hooks.deleteCard(set.id, cardId)}
@@ -80,11 +84,11 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
         </div>
       )}
 
-      {creating && <SetEditor onSave={(name, desc) => hooks.createSet(name, desc)} onClose={() => setCreating(false)} />}
+      {creating && <SetEditor onSave={(name, desc, lang) => hooks.createSet(name, desc, lang)} onClose={() => setCreating(false)} />}
       {editingSet && (
         <SetEditor
           existing={editingSet}
-          onSave={(name, desc) => hooks.updateSet(editingSet.id, { name, description: desc })}
+          onSave={(name, desc, lang) => hooks.updateSet(editingSet.id, { name, description: desc, language: lang })}
           onClose={() => setEditingSet(null)}
         />
       )}

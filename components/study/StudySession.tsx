@@ -66,6 +66,7 @@ export default function StudySession({ set, settings, onExit, onSessionComplete,
         showRomanization={settings.showRomanization}
         ttsRate={settings.ttsRate}
         ttsPitch={settings.ttsPitch}
+        setLanguage={set.language}
         onFlip={session.flip}
       />
 
