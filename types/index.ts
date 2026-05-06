@@ -28,6 +28,7 @@ export interface UserSettings {
   studyDirection: 'korean-first' | 'english-first';
   streak: number;
   lastStudyDate: string;
+  xp: number;
 }
 
 export type View = 'sets' | 'study' | 'stats' | 'settings';

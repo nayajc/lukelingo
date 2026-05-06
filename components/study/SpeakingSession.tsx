@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { CardSet, UserSettings } from '@/types';
+import { CardSet, UserSettings, VocabularyCard } from '@/types';
 import { useStudySession } from '@/hooks/useStudySession';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { isKoreanMatch } from '@/lib/korean';
@@ -12,6 +12,7 @@ import Button from '@/components/ui/Button';
 interface Props {
   set: CardSet;
   settings: UserSettings;
+  overrideCards?: VocabularyCard[];
   onExit: () => void;
   onSessionComplete: (known: number, learning: number) => void;
   onUpdateCard: (cardId: string, data: { confidence: 'known' | 'learning'; lastReviewedAt: number }) => void;
@@ -19,11 +20,11 @@ interface Props {
 
 type CardState = 'idle' | 'listening' | 'correct' | 'wrong';
 
-export default function SpeakingSession({ set, onExit, onSessionComplete, onUpdateCard }: Props) {
+export default function SpeakingSession({ set, overrideCards, onExit, onSessionComplete, onUpdateCard }: Props) {
   const [key, setKey] = useState(0);
   const [done, setDone] = useState(false);
   const [cardState, setCardState] = useState<CardState>('idle');
-  const session = useStudySession(set.cards);
+  const session = useStudySession(overrideCards ?? set.cards);
   const srLang = (set.language ?? 'korean') === 'chinese' ? 'zh-CN' : 'ko-KR';
   const speech = useSpeechRecognition(srLang);
 

@@ -10,6 +10,7 @@ import SetList from '@/components/sets/SetList';
 import StudySession from '@/components/study/StudySession';
 import SpeakingSession from '@/components/study/SpeakingSession';
 import StudyModePicker from '@/components/study/StudyModePicker';
+import { getDueCards } from '@/lib/srs';
 import SettingsView from './SettingsView';
 import StatsView from '@/components/dashboard/StatsView';
 import LoginScreen from '@/components/auth/LoginScreen';
@@ -19,7 +20,7 @@ export default function AppShell() {
   const { user, loading, signOut } = useAuth();
   const [view, setView] = useState<View>('sets');
   const [activeSetId, setActiveSetId] = useState<string | null>(null);
-  const [studyMode, setStudyMode] = useState<'pick' | 'flashcard' | 'speaking'>('pick');
+  const [studyMode, setStudyMode] = useState<'pick' | 'flashcard' | 'speaking' | 'review'>('pick');
 
   const cardSets = useCardSets(user?.uid ?? null);
   const { settings, update, recordSession } = useSettings(user?.uid ?? null);
@@ -45,6 +46,7 @@ export default function AppShell() {
     <div className="min-h-screen bg-ink-50">
       <Header
         streak={settings.streak}
+        xp={settings.xp ?? 0}
         userPhoto={user.photoURL}
         userName={user.displayName}
         onSignOut={signOut}
@@ -81,6 +83,17 @@ export default function AppShell() {
           />
         )}
 
+        {view === 'study' && activeSet && studyMode === 'review' && (
+          <StudySession
+            set={activeSet}
+            settings={settings}
+            overrideCards={getDueCards(activeSet.cards)}
+            onExit={handleBackToPick}
+            onSessionComplete={(known, learning) => recordSession(known, learning, known + learning)}
+            onUpdateCard={(cardId, data) => cardSets.updateCard(activeSet.id, cardId, data)}
+          />
+        )}
+
         {view === 'study' && !activeSet && (
           <div className="max-w-2xl mx-auto px-5 py-6">
             <EmptyState
@@ -94,7 +107,7 @@ export default function AppShell() {
         )}
 
         {view === 'stats' && (
-          <StatsView key={view} userId={user.uid} streak={settings.streak} />
+          <StatsView key={view} userId={user.uid} streak={settings.streak} xp={settings.xp ?? 0} />
         )}
 
         {view === 'settings' && (

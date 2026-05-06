@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { loadStudyLogs, StudyLog } from '@/lib/firestore';
+import { calcLevel, getLevelTitle, xpProgressPct, xpToNextLevel } from '@/lib/xp';
 
-interface Props { userId: string | null; streak: number; }
+interface Props { userId: string | null; streak: number; xp: number; }
 
 function buildHeatmap(logs: StudyLog[]) {
   const map = new Map(logs.map((l) => [l.date, l.cardsStudied]));
@@ -33,7 +34,11 @@ function buildAccuracyData(logs: StudyLog[]) {
   }));
 }
 
-export default function StatsView({ userId, streak }: Props) {
+export default function StatsView({ userId, streak, xp }: Props) {
+  const level = calcLevel(xp);
+  const title = getLevelTitle(level);
+  const pct = xpProgressPct(xp);
+  const toNext = xpToNextLevel(xp);
   const [logs, setLogs] = useState<StudyLog[]>([]);
 
   useEffect(() => {
@@ -62,6 +67,20 @@ export default function StatsView({ userId, streak }: Props) {
     <div className="max-w-2xl mx-auto px-5 py-7">
       <p className="label mb-0.5">Your learning</p>
       <h1 className="text-xl font-black tracking-tighter text-ink-950 mb-6">Progress</h1>
+
+      {/* XP / Level */}
+      <div className="border border-ink-200 rounded-sm p-4 mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <span className="text-2xl font-black tracking-tighter text-ink-950">Lv.{level}</span>
+            <span className="ml-2 text-sm font-semibold text-ink-400">{title}</span>
+          </div>
+          <span className="text-xs text-ink-400">{xp} XP · {toNext} to next</span>
+        </div>
+        <div className="w-full h-2 bg-ink-100 rounded-full overflow-hidden">
+          <div className="h-2 bg-ink-950 rounded-full transition-all" style={{ width: `${pct}%` }} />
+        </div>
+      </div>
 
       {/* Summary stats */}
       <div className="grid grid-cols-3 gap-3 mb-8">

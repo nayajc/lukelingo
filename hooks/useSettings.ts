@@ -9,6 +9,7 @@ const DEFAULT: UserSettings = {
   showRomanization: true,
   studyDirection: 'korean-first',
   streak: 0, lastStudyDate: '',
+  xp: 0,
 };
 
 export function useSettings(userId: string | null = null) {
@@ -34,7 +35,9 @@ export function useSettings(userId: string | null = null) {
     const streak = settings.lastStudyDate === yesterday ? settings.streak + 1
       : settings.lastStudyDate === today ? settings.streak : 1;
 
-    update({ streak, lastStudyDate: today });
+    const gained = knownCount * 3 + learningCount * 1;
+    const newXp = (settings.xp ?? 0) + gained;
+    update({ streak, lastStudyDate: today, xp: newXp });
 
     if (userId) {
       await recordStudyLog(userId, {

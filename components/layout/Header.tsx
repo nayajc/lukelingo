@@ -1,14 +1,17 @@
 import Image from 'next/image';
+import { calcLevel } from '@/lib/xp';
 
 interface Props {
   streak: number;
+  xp: number;
   userPhoto?: string | null;
   userName?: string | null;
   onSignOut?: () => void;
   saveStatus?: 'idle' | 'saving' | 'saved';
 }
 
-export default function Header({ streak, userPhoto, userName, onSignOut, saveStatus }: Props) {
+export default function Header({ streak, xp, userPhoto, userName, onSignOut, saveStatus }: Props) {
+  const level = calcLevel(xp);
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-ink-200">
       <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
@@ -22,6 +25,9 @@ export default function Header({ streak, userPhoto, userName, onSignOut, saveSta
           {saveStatus === 'saved' && (
             <span className="text-xs text-ink-400 tracking-tight">Saved ✓</span>
           )}
+          <span className="text-xs font-semibold text-ink-500 tracking-tight border border-ink-200 rounded-full px-2 py-0.5">
+            Lv.{level}
+          </span>
           {streak > 0 && (
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-ink-950 inline-block" />

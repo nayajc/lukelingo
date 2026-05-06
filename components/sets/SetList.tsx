@@ -52,12 +52,21 @@ export default function SetList({ sets, hooks, onStudy }: Props) {
                 onClick={() => setExpanded(expanded === set.id ? null : set.id)}
               >
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-semibold text-sm text-ink-950 tracking-tight">{set.name}</p>
                     {set.language === 'chinese' && <span className="text-xs text-ink-400 border border-ink-200 rounded px-1.5 py-0.5 leading-none">🇨🇳 中文</span>}
+                    {set.cards.length > 0 && set.cards.every((c) => c.confidence === 'known') && (
+                      <span className="text-xs font-semibold text-white bg-ink-950 rounded px-1.5 py-0.5 leading-none">✦ Complete</span>
+                    )}
                   </div>
                   {set.description && <p className="text-xs text-ink-400 mt-0.5">{set.description}</p>}
-                  <p className="label mt-1">{set.cards.length} cards</p>
+                  <p className="label mt-1">
+                    {set.cards.length} cards
+                    {set.cards.length > 0 && (() => {
+                      const known = set.cards.filter((c) => c.confidence === 'known').length;
+                      return known > 0 ? <span className="ml-2 text-ink-400">{known} / {set.cards.length} known</span> : null;
+                    })()}
+                  </p>
                 </div>
                 <div className="flex gap-1.5 flex-shrink-0">
                   <Button size="sm" onClick={(e) => { e.stopPropagation(); onStudy(set.id); }} disabled={set.cards.length === 0}>
