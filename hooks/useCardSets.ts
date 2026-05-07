@@ -1,12 +1,12 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { CardSet, VocabularyCard, SetLanguage } from '@/types';
-import { sampleSet } from '@/lib/sampleData';
+import { sampleSet, defaultSets } from '@/lib/sampleData';
 import { subscribeCardSets, saveCardSet, deleteCardSet } from '@/lib/firestore';
 import { useLocalStorage } from './useLocalStorage';
 
 export function useCardSets(userId: string | null = null) {
-  const [localSets, setLocalSets] = useLocalStorage<CardSet[]>('lukelingo-sets', [sampleSet]);
+  const [localSets, setLocalSets] = useLocalStorage<CardSet[]>('lukelingo-sets', defaultSets);
   const [cloudSets, setCloudSets] = useState<CardSet[] | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
@@ -15,7 +15,15 @@ export function useCardSets(userId: string | null = null) {
     if (!userId) { setCloudSets(null); return; }
     return subscribeCardSets(
       userId,
-      setCloudSets,
+      (sets) => {
+        if (sets.length === 0) {
+          // First-time user: seed default sets
+          defaultSets.forEach((s) => saveCardSet(userId, s));
+          setCloudSets(defaultSets);
+        } else {
+          setCloudSets(sets);
+        }
+      },
       (err) => setSaveError(`읽기 실패: ${err.message}`),
     );
   }, [userId]);
